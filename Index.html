@@ -1,0 +1,139 @@
+<html ng-app="app">
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+</head>
+<body ng-controller="homeCtrl" ng-cloak>
+
+	<div class="container">
+		<form class="form-horizontal" ng-model='user'>
+			<div class="form-group">
+				<input type="hidden" class="form-control" style="width:250px;" ng-model="user.id"/>
+				<label>FirstName</label>
+				<input type="text" class="form-control" style="width:250px;" ng-model="user.firstName"/>
+				<label>Name</label>
+				<input type="text" class="form-control" style="width:250px;" ng-model="user.name"/>
+				<label>Age</label>
+				<input type="text" class="form-control" style="width:250px;" ng-model="user.age"/>
+				<label>Email</label>
+				<input type="email" class="form-control" style="width:250px;" ng-model="user.email"/>
+				<label>Password</label>
+				<input type="password" class="form-control" style="width:250px;" ng-model="user.password"/>
+			</div>
+			<div class="form-group">
+				<input ng-show="isCreate" ng-click="add(user)" type="submit" class="btn btn-default" value="Create"/>
+				<input ng-hide="isCreate" ng-click="edit(user)" type="submit" class="btn btn-default" value="Edit"/>
+			</div>
+		</form>
+		<hr>
+		<div class="form-inline">
+			<label>Search</label> <input type="text" ng-model="searchAll" class="form-control" style="width:250px;"/>
+		</div>
+		<br>
+		<table class="table table-striped">
+			<tr>
+				<th>id</th>
+				<th>firstName</th>
+				<th>name</th>
+				<th>age</th>
+				<th>email</th>
+				<th>password</th>
+				<th></th>
+			</tr>
+			<tr ng-repeat="u in data | filter:searchAll" style="cursor:pointer;" ng-click="preEdit(u)">
+				<td>{{u.id}}</td>
+				<td>{{u.firstName}}</td>
+				<td>{{u.name}}</td>
+				<td>{{u.age}}</td>
+				<td>{{u.email}}</td>
+				<td>{{u.password}}</td>
+				<td><button class="btn btn-danger" type="button" ng-click="remove(u)"><span class="glyphicon glyphicon-trash"></span></button></td>
+			</tr>
+		</table>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+	<script>
+		var app = angular.module('app',[]);
+
+		app.controller('homeCtrl',homeCtrl);
+		homeCtrl.$inject = ['$scope'];
+
+		function homeCtrl($scope){
+			$scope.data = [{id:1,name:'Giunta',firstName:'Lucas',age:26,email:'lucas@outlook.com',password:'mypasswd'},
+							{id:2,name:'sdfsdqf',firstName:'Bruno',age:27,email:'Bruno@outlook.com',password:'mypasswd'},
+							{id:3,name:'zerzer',firstName:'Ugo',age:28,email:'Ugo@outlook.com',password:'mypasswd'},
+							{id:4,name:'dsfdsf',firstName:'Francois',age:29,email:'Francois@outlook.com',password:'mypasswd'},
+							{id:5,name:'raerae',firstName:'Carl',age:20,email:'Carl@outlook.com',password:'mypasswd'},
+							{id:6,name:'ioio',firstName:'John',age:21,email:'John@outlook.com',password:'mypasswd'},
+							{id:7,name:'hggjhg',firstName:'Celine',age:22,email:'Celine@outlook.com',password:'mypasswd'},
+							{id:8,name:'cxvxcv',firstName:'Justine',age:23,email:'Justine@outlook.com',password:'mypasswd'},
+							{id:9,name:'pmpkm',firstName:'Joss',age:24,email:'Joss@outlook.com',password:'mypasswd'},
+							{id:10,name:'aqwsdqd',firstName:'Aurelia',age:25,email:'Aurelia@outlook.com',password:'mypasswd'}]
+
+			$scope.isCreate = true;
+
+			$scope.user = {
+					id:'',
+					name:'',
+					firstName:'',
+					age:'',
+					email:'',
+					password: ''
+				}
+
+			var clear = function(){
+				$scope.user = {
+					id:'',
+					name:'',
+					firstName:'',
+					age:'',
+					email:'',
+					password: ''
+				}
+				$scope.isCreate = true;
+
+			}
+			$scope.add = function(user){
+				user.id = $scope.data.length + 1;
+				$scope.data.push(user);
+				clear();
+			}
+
+			$scope.preEdit = function(u){
+				$scope.isCreate = false;
+				$scope.user.id = u.id;
+				$scope.user.name = u.name;
+				$scope.user.firstName = u.firstName;
+				$scope.user.age = u.age;
+				$scope.user.email = u.email;
+				$scope.user.password = u.password;
+			}
+
+			$scope.edit = function(user){
+				for (var i = 0; i <= $scope.data.length; i++) {
+					if($scope.data[i].id == user.id){
+						$scope.data[i].name = user.name;
+						$scope.data[i].firstName = user.firstName;
+						$scope.data[i].age = user.age;
+						$scope.data[i].email = user.email;
+						$scope.data[i].password = user.password;
+
+						return false;
+					}
+				};
+				clear();
+			}
+
+			$scope.remove = function(user){
+				for (var i = 0; i <= $scope.data.length; i++) {
+					if($scope.data[i].id == user.id){
+						$scope.data.splice(i,1);
+
+						return false;
+					}
+				};
+			}
+		}
+	</script>
+</body>
+</html>
