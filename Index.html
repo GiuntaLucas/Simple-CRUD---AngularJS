@@ -23,6 +23,7 @@
 			<div class="form-group">
 				<input ng-show="isCreate" ng-click="add(user)" type="submit" class="btn btn-default" value="Create"/>
 				<input ng-hide="isCreate" ng-click="edit(user)" type="submit" class="btn btn-default" value="Edit"/>
+				<input ng-click="clear()" type="button" class="btn btn-primary" value="Clear"/>
 			</div>
 		</form>
 		<hr>
@@ -81,7 +82,7 @@
 					password: ''
 				}
 
-			var clear = function(){
+			$scope.clear = function(){
 				$scope.user = {
 					id:'',
 					name:'',
@@ -96,7 +97,7 @@
 			$scope.add = function(user){
 				user.id = $scope.data.length + 1;
 				$scope.data.push(user);
-				clear();
+				$scope.clear();
 			}
 
 			$scope.preEdit = function(u){
@@ -121,7 +122,7 @@
 						return false;
 					}
 				};
-				clear();
+				$scope.clear();
 			}
 
 			$scope.remove = function(user){
