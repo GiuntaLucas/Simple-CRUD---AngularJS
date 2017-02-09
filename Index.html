@@ -1,44 +1,77 @@
 <html ng-app="app">
 <head>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
-
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+     <style type="text/css">
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+    }       
+    </style>
 </head>
 <body ng-controller="homeCtrl" ng-cloak>
+
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">CRUD + Translation</a>
+	    </div>
+
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav navbar-right">
+	        <li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Language <span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="" ng-click="changeLanguage('en')">English</a></li>
+	            <li><a href="" ng-click="changeLanguage('fr')">French</a></li>
+	          </ul>
+	        </li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
 
 	<div class="container">
 		<form class="form-horizontal" ng-model='user'>
 			<div class="form-group">
 				<input type="hidden" class="form-control" style="width:250px;" ng-model="user.id"/>
-				<label>FirstName</label>
+				<label>{{'FIRSTNAME' | translate}}</label>
 				<input type="text" class="form-control" style="width:250px;" ng-model="user.firstName"/>
-				<label>Name</label>
+				<label>{{'NAME' | translate}}</label>
 				<input type="text" class="form-control" style="width:250px;" ng-model="user.name"/>
-				<label>Age</label>
+				<label>{{'AGE' | translate}}</label>
 				<input type="text" class="form-control" style="width:250px;" ng-model="user.age"/>
-				<label>Email</label>
+				<label>{{'EMAIL' | translate}}</label>
 				<input type="email" class="form-control" style="width:250px;" ng-model="user.email"/>
-				<label>Password</label>
+				<label>{{'PASS' | translate}}</label>
 				<input type="password" class="form-control" style="width:250px;" ng-model="user.password"/>
 			</div>
 			<div class="form-group">
-				<input ng-show="isCreate" ng-click="add(user)" type="submit" class="btn btn-default" value="Create"/>
-				<input ng-hide="isCreate" ng-click="edit(user)" type="submit" class="btn btn-default" value="Edit"/>
-				<input ng-click="clear()" type="button" class="btn btn-primary" value="Clear"/>
+				<input ng-show="isCreate" ng-click="add(user)" type="submit" class="btn btn-default" value="{{'CREATE' | translate}}"/>
+				<input ng-hide="isCreate" ng-click="edit(user)" type="submit" class="btn btn-default" value="{{'EDIT' | translate}}"/>
+				<input ng-click="clear()" type="button" class="btn btn-default" value="{{'CLEAR' | translate}}"/>
 			</div>
 		</form>
 		<hr>
 		<div class="form-inline">
-			<label>Search</label> <input type="text" ng-model="searchAll" class="form-control" style="width:250px;"/>
+			<label>{{'SEARCH' | translate}}</label> <input type="text" ng-model="searchAll" class="form-control" style="width:250px;"/>
 		</div>
 		<br>
 		<table class="table table-striped">
 			<tr>
 				<th>id</th>
-				<th>firstName</th>
-				<th>name</th>
-				<th>age</th>
-				<th>email</th>
-				<th>password</th>
+				<th>{{'FIRSTNAME' | translate}}</th>
+				<th>{{'NAME' | translate}}</th>
+				<th>{{'AGE' | translate}}</th>
+				<th>{{'EMAIL' | translate}}</th>
+				<th>{{'PASS' | translate}}</th>
 				<th></th>
 			</tr>
 			<tr ng-repeat="u in data | filter:searchAll" style="cursor:pointer;" ng-click="preEdit(u)">
@@ -52,14 +85,58 @@
 			</tr>
 		</table>
 	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-cookies.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.10.0/angular-translate.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-local/2.10.0/angular-translate-storage-local.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-cookie/2.10.0/angular-translate-storage-cookie.js"></script>
 	<script>
-		var app = angular.module('app',[]);
+		var app = angular.module('app',['ngCookies', 'pascalprecht.translate']);
+
+		var en = {
+			FIRSTNAME: 'FirstName',
+			NAME: 'Name',
+			AGE: 'Age',
+			EMAIL:'Email',
+			PASS:'Password',
+			CREATE:'Create',
+			EDIT:'Edit',
+			CLEAR:'Clear',
+			SEARCH:'Search'
+		}
+		var fr = {
+			FIRSTNAME: 'Prénom',
+			NAME: 'Nom',
+			AGE: 'Age',
+			EMAIL:'Email',
+			PASS:'Mot de pass',
+			CREATE:'Crée',
+			EDIT:'Modifier',
+			CLEAR:'Netoyer',
+			SEARCH:'Rechercher'
+		}
+
+		app.config(function($translateProvider){
+			$translateProvider.translations('en',en);
+			$translateProvider.translations('fr',fr);
+
+			$translateProvider.preferredLanguage('en');
+      			$translateProvider.useLocalStorage();
+      			$translateProvider.useSanitizeValueStrategy('escape');
+		})
+
 
 		app.controller('homeCtrl',homeCtrl);
-		homeCtrl.$inject = ['$scope'];
+		homeCtrl.$inject = ['$scope','$translate'];
 
-		function homeCtrl($scope){
+		function homeCtrl($scope, $translate){
+			$scope.changeLanguage = function (key) {
+
+			    $translate.use(key);
+			};
+
 			$scope.data = [{id:1,name:'Giunta',firstName:'Lucas',age:26,email:'lucas@outlook.com',password:'mypasswd'},
 							{id:2,name:'sdfsdqf',firstName:'Bruno',age:27,email:'Bruno@outlook.com',password:'mypasswd'},
 							{id:3,name:'zerzer',firstName:'Ugo',age:28,email:'Ugo@outlook.com',password:'mypasswd'},
